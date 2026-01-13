@@ -29,6 +29,8 @@ class LTDialog extends LTBase {
       return;
     }
 
+    this.#dialog.classList.add('animate-pop-in');
+
     // Trigger buttons
     this.$$('[data-trigger]').forEach(el => {
       el.addEventListener('click', this);
@@ -104,7 +106,11 @@ class LTDialog extends LTBase {
 
   close() {
     if (this.#dialog && this.#dialog.open) {
-      this.#dialog.close();
+      this.#dialog.setAttribute('data-state', 'closing');
+      setTimeout(() => {
+        this.#dialog.close();
+        this.#dialog.removeAttribute('data-state');
+      }, 150);
     }
   }
 

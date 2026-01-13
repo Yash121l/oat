@@ -26,6 +26,7 @@ class LTToast extends LTBase {
 
   init() {
     this.#duration = parseInt(this.getAttribute('duration') || '5000', 10);
+    this.classList.add('animate-pop-up');
 
     // Close button
     this.$$('[data-close]').forEach(el => {

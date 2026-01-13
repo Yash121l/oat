@@ -7,6 +7,7 @@ CSS_FILES = src/css/00-layers.css \
             src/css/01-reset.css \
             src/css/02-theme.css \
             src/css/03-base.css \
+            src/css/animations.css \
             src/css/button.css \
             src/css/form.css \
             src/css/table.css \
