@@ -1,5 +1,5 @@
 +++
-title = "Customizing and theming"
+title = "Customizing"
 description = "Customize and theme lmui by overriding CSS variables"
 +++
 
@@ -86,3 +86,15 @@ The following color variables from theme.css control the theme (colour profile).
 ## Dark mode
 
 Adding `data-theme="dark"` to `<body>` applies the dark theme. Customize the dark theme by redefining the aforementioned theme variables and scoping them inside `[data-theme="dark"] { }`
+
+# Picking and choosing
+
+While it is quite okay to bundle all of lmui given how tiny it is (CSS %KB, JS %KB), it is possible to include components selectively.
+
+#### Must include
+- `01-reset.css`
+- `02-theme.css`
+- `03-base.css`
+- `base.js`
+
+After these, include CSS and JS files the respective components.

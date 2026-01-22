@@ -1,18 +1,14 @@
-/**
- * lmui - Base Web Component Class
- * Provides lifecycle management, event handling, and utilities.
- */
+// lmui - Base Web Component Class
+// Provides lifecycle management, event handling, and utilities.
 
 class LMBase extends HTMLElement {
   #initialized = false;
 
-  /**
-   * Called when element is added to DOM.
-   */
+  // Called when element is added to DOM.
   connectedCallback() {
     if (this.#initialized) return;
 
-    // Wait for DOM to be ready
+    // Wait for DOM to be ready.
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => this.#setup(), { once: true });
     } else {
@@ -20,48 +16,32 @@ class LMBase extends HTMLElement {
     }
   }
 
-  /**
-   * Private setup - ensures init() is only called once.
-   */
+  // Private setup to ensure that init() is only called once.
   #setup() {
     if (this.#initialized) return;
     this.#initialized = true;
     this.init();
   }
 
-  /**
-   * Override in subclass for initialization logic.
-   */
+  // Override in WebComponent subclasses for init logic.
   init() {}
 
-  /**
-   * Called when element is removed from DOM.
-   */
+  // Called when element is removed from DOM.
   disconnectedCallback() {
     this.cleanup();
   }
 
-  /**
-   * Override in subclass for cleanup logic.
-   */
+  // Override in subclass for cleanup logic.
   cleanup() {}
 
-  /**
-   * Central event handler - enables automatic cleanup.
-   * Usage: element.addEventListener('click', this)
-   * @param {Event} event
-   */
+  // Central event handler - enables automatic cleanup.
+  // Usage: element.addEventListener('click', this)
   handleEvent(event) {
     const handler = this[`on${event.type}`];
     if (handler) handler.call(this, event);
   }
 
-  /**
-   * Emit a custom event.
-   * @param {string} name - Event name
-   * @param {any} detail - Event detail data
-   * @returns {boolean} - Whether event was cancelled
-   */
+  // Emit a custom event.
   emit(name, detail = null) {
     return this.dispatchEvent(new CustomEvent(name, {
       bubbles: true,
@@ -71,20 +51,12 @@ class LMBase extends HTMLElement {
     }));
   }
 
-  /**
-   * Get boolean attribute value.
-   * @param {string} name
-   * @returns {boolean}
-   */
+  // Get boolean attribute value.
   getBool(name) {
     return this.hasAttribute(name);
   }
 
-  /**
-   * Set or remove boolean attribute.
-   * @param {string} name
-   * @param {boolean} value
-   */
+  // Set or remove boolean attribute.
   setBool(name, value) {
     if (value) {
       this.setAttribute(name, '');
@@ -93,28 +65,17 @@ class LMBase extends HTMLElement {
     }
   }
 
-  /**
-   * Query selector within this element.
-   * @param {string} selector
-   * @returns {Element|null}
-   */
+  // Query selector within this element.
   $(selector) {
     return this.querySelector(selector);
   }
 
-  /**
-   * Query selector all within this element.
-   * @param {string} selector
-   * @returns {Element[]}
-   */
+  // Query selector all within this element.
   $$(selector) {
     return Array.from(this.querySelectorAll(selector));
   }
 
-  /**
-   * Generate a unique ID string.
-   * @returns {string}
-   */
+  // Generate a unique ID string.
   uid() {
     return Math.random().toString(36).slice(2, 10);
   }
