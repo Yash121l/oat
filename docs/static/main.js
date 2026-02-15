@@ -1,43 +1,74 @@
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.ot-demo').forEach(demo => {
-    const pre = demo.querySelector('pre');
-    if (!pre) return;
-    pre.style.display = 'block';
+  // Iterate over Zola syntax highlighte code blocks and create 'Preview' and 'Code' tabs.
+  document.querySelectorAll('pre[data-lang]').forEach(pre => {
 
+    // Insert the buttons menu before the code block.
+    const menu = document.createElement('menu');
+    menu.className = 'actions buttons';
+    pre.prepend(menu);
+
+    // 'Copy' button.
+    {
+      const b = document.createElement('button');
+      b.className = 'ghost small';
+      b.textContent = 'Copy';
+      b.setAttribute('aria-label', 'Copy code to clipboard');
+      b.addEventListener('click', () => {
+        navigator.clipboard.writeText(pre.querySelector('code').textContent.trim()).then(() => {
+          b.textContent = 'Copied';
+          setTimeout(() => b.textContent = 'Copy', 2000);
+        });
+      });
+      menu.appendChild(b);
+    }
+
+    // Demo code block or just a normal code block?
+    const demo = pre.closest('.ot-demo');
+    if (!demo) {
+      return;
+    }
+
+    pre.style.display = 'block';
     const code = pre.querySelector('code');
     const rawHTML = code.textContent;
 
-    // Create tabbed interface.
     demo.innerHTML = `
-      <ot-tabs>
-        <div role="tablist">
-          <button role="tab">⧉ Preview</button>
-          <button role="tab">{} Code</button>
-        </div>
-        <div role="tabpanel">
-          <div class="demo-box"><div class="demo-content">${rawHTML}</div></div>
-        </div>
-        <div role="tabpanel"></div>
-      </ot-tabs>
-    `;
+        <ot-tabs>
+          <div role="tablist">
+            <button role="tab">⧉ Preview</button>
+            <button role="tab">{} Code</button>
+          </div>
+          <div role="tabpanel">
+            <div class="demo-box"><div class="demo-content">${rawHTML}</div></div>
+          </div>
+          <div role="tabpanel"></div>
+        </ot-tabs>
+      `;
 
-    // Move the original Zola syntax-highlighted <pre> into the Code tab.
-    demo.querySelector(':scope > ot-tabs > [role="tabpanel"]:last-child').appendChild(pre);
-  });
+    const panel = demo.querySelector(':scope > ot-tabs > [role="tabpanel"]:last-child');
+    panel.appendChild(pre);
 
-  // Add a 'copy' button to code blocks.
-  document.querySelectorAll('pre[data-lang]').forEach(el => {
-    const btn = document.createElement('button');
-    btn.className = 'copy-btn ghost small';
-    btn.textContent = 'Copy';
-    btn.setAttribute('aria-label', 'Copy code to clipboard');
-    btn.addEventListener('click', () => {
-      navigator.clipboard.writeText(el.querySelector('code').textContent.trim()).then(() => {
-        btn.textContent = 'Copied';
-        setTimeout(() => btn.textContent = 'Copy', 2000);
+
+    // Make the code block editable and update the preview on change.
+    const content = demo.querySelector('.demo-content');
+    const el = code || pre;
+    const highlighted = el.innerHTML;
+    el.setAttribute('contenteditable', 'plaintext-only');
+    el.setAttribute('spellcheck', 'false');
+    el.addEventListener('input', () => content.innerHTML = el.textContent);
+
+    // 'Reset' button.
+    {
+      const b = document.createElement('button');
+      b.className = 'ghost small btn-reset';
+      b.textContent = 'Reset';
+      b.setAttribute('aria-label', 'Reset code to original');
+      b.addEventListener('click', () => {
+        el.innerHTML = highlighted;
+        content.innerHTML = rawHTML;
       });
-    });
-    el.prepend(btn);
+      menu.prepend(b);
+    }
   });
 });
 
