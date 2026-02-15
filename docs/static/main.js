@@ -68,6 +68,32 @@ document.addEventListener('DOMContentLoaded', () => {
         content.innerHTML = rawHTML;
       });
       menu.prepend(b);
+  // Add 'copy' and 'run' buttons to code blocks.
+  document.querySelectorAll('pre[data-lang]').forEach(el => {
+    const code = el.querySelector('code').textContent;
+
+    // Cupy Button
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn ghost small';
+    btn.textContent = 'Copy';
+    btn.setAttribute('aria-label', 'Copy code to clipboard');
+    btn.addEventListener('click', () => {
+      navigator.clipboard.writeText(code.trim()).then(() => {
+        btn.textContent = 'Copied';
+        setTimeout(() => btn.textContent = 'Copy', 2000);
+      });
+    });
+    el.prepend(btn);
+
+    // Playground Button (only for HTML)
+    if (el.getAttribute('data-lang') === 'html') {
+      const playBtn = document.createElement('a');
+      playBtn.className = 'playground-btn button ghost small';
+      playBtn.textContent = 'Run';
+      playBtn.href = '/playground/?code=' + encodeURIComponent(code);
+      playBtn.target = '_blank';
+      playBtn.setAttribute('aria-label', 'Open in Playground');
+      el.prepend(playBtn);
     }
   });
 });

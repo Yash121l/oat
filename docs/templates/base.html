@@ -247,14 +247,36 @@
         &.btn-reset {
           border-right: none;
         }
+      .copy-btn, .playground-btn {
+        opacity: 0;
+        position: absolute;
+        top: var(--space-2);
+        padding: 2px var(--space-3);
+        color: #bbb;
+        border: 1px solid #bbb;
+        transition: opacity 150ms ease-in-out;
+        text-decoration: none;
+        line-height: normal;
 
         &:hover {
           background-color: transparent;
+          color: var(--foreground);
+          border-color: var(--foreground);
         }
       }
 
       [contenteditable] {
         outline: none;
+      .copy-btn {
+        right: var(--space-2);
+      }
+
+      .playground-btn {
+        right: calc(var(--space-2) + 60px); 
+      }
+
+      &:hover .copy-btn, &:hover .playground-btn {
+        opacity: 1;
       }
     }
 
