@@ -221,9 +221,32 @@
     }
 
     pre[data-lang] {
-      /* Hide Zola highlighted blocks initially to prevent FOUC. Show in JS after tab transformation. */
       position: relative;
 
+      code {
+        display: block;
+      }
+
+      menu.actions {
+        opacity: 0;
+        position: absolute;
+        top: var(--space-2);
+        right: var(--space-2);
+        transition: opacity 150ms ease-in-out;
+      }
+
+      &:hover menu.actions {
+        opacity: 1;
+      }
+
+      menu.actions button {
+        color: #bbb;
+        border: 1px solid #bbb;
+        padding: 2px var(--space-3);
+
+        &.btn-reset {
+          border-right: none;
+        }
       .copy-btn, .playground-btn {
         opacity: 0;
         position: absolute;
@@ -242,6 +265,8 @@
         }
       }
 
+      [contenteditable] {
+        outline: none;
       .copy-btn {
         right: var(--space-2);
       }
